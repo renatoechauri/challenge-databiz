@@ -13,7 +13,7 @@ class TaskCreate(TaskBase):
 
 
 class TaskUpdate(BaseModel):
-    titulo: str | None = None
+    titulo: str
     descripcion: str | None = None
     completada: bool | None = None
 

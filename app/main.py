@@ -5,7 +5,6 @@ from .database import Base, engine, get_db
 from .schemas import TaskCreate, TaskUpdate, TaskOut
 from . import crud
 
-# Crea tablas automáticamente (simple para challenge)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="ToDo API")
