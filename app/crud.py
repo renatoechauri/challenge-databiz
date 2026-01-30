@@ -4,7 +4,7 @@ from sqlalchemy import select
 from .models import Task
 from .schemas import TaskCreate, TaskUpdate
 
-
+# Operaciones CRUD para la entidad Task
 def create_task(db: Session, data: TaskCreate) -> Task:
     task = Task(
         titulo=data.titulo,
@@ -16,17 +16,17 @@ def create_task(db: Session, data: TaskCreate) -> Task:
     db.refresh(task)
     return task
 
-
+# Listar todas las tareas
 def list_tasks(db: Session) -> list[Task]:
     stmt = select(Task).order_by(Task.id.asc())
     return list(db.scalars(stmt).all())
 
-
+# Obtener una tarea por su ID
 def get_task(db: Session, task_id: int) -> Task | None:
     stmt = select(Task).where(Task.id == task_id)
     return db.scalars(stmt).first()
 
-
+# Actualizar una tarea existente
 def update_task(db: Session, task: Task, data: TaskUpdate) -> Task:
     if data.titulo is not None:
         task.titulo = data.titulo
@@ -39,7 +39,7 @@ def update_task(db: Session, task: Task, data: TaskUpdate) -> Task:
     db.refresh(task)
     return task
 
-
+# Eliminar una tarea
 def delete_task(db: Session, task: Task) -> None:
     db.delete(task)
     db.commit()

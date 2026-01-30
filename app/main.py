@@ -23,7 +23,7 @@ async def sqlalchemy_exception_handler(request: Request, exc: SQLAlchemyError):
         }
     )
 
-
+# General Exception Handler
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception):
     return JSONResponse(
@@ -35,11 +35,14 @@ async def general_exception_handler(request: Request, exc: Exception):
     )
 
 
+# Health Check Endpoint
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
 
+# CRUD Endpoints
+# Endpoint para crear una nueva tarea
 @app.post("/tasks", response_model=TaskOut, status_code=status.HTTP_201_CREATED)
 def create_task(payload: TaskCreate, db: Session = Depends(get_db)):
     try:
@@ -55,7 +58,7 @@ def create_task(payload: TaskCreate, db: Session = Depends(get_db)):
             detail="Error al crear la tarea en la base de datos"
         )
 
-
+# Endpoint para listar todas las tareas
 @app.get("/tasks", response_model=list[TaskOut])
 def list_tasks(db: Session = Depends(get_db)):
     try:
@@ -66,7 +69,7 @@ def list_tasks(db: Session = Depends(get_db)):
             detail="Error al obtener las tareas"
         )
 
-
+# Endpoint para obtener una tarea por su ID
 @app.get("/tasks/{task_id}", response_model=TaskOut)
 def get_task(task_id: int, db: Session = Depends(get_db)):
     if task_id <= 0:
@@ -88,7 +91,7 @@ def get_task(task_id: int, db: Session = Depends(get_db)):
             detail="Error al obtener la tarea"
         )
 
-
+# Endpoint para actualizar una tarea por su ID
 @app.put("/tasks/{task_id}", response_model=TaskOut)
 def update_task(task_id: int, payload: TaskUpdate, db: Session = Depends(get_db)):
     if task_id <= 0:
@@ -116,6 +119,7 @@ def update_task(task_id: int, payload: TaskUpdate, db: Session = Depends(get_db)
         )
 
 
+# Endpoint para eliminar una tarea por su ID
 @app.delete("/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_task(task_id: int, db: Session = Depends(get_db)):
     if task_id <= 0:

@@ -5,6 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from .database import Base
 
 
+# Model de la tabla "tasks"
 class Task(Base):
     __tablename__ = "tasks"
 
